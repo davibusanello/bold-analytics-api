@@ -13,19 +13,26 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        'App\Console\Commands\ShopifyReviewSync',
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        /**
+         * Job scheduled to run Shopify Reviews API Integration
+         */
+        $schedule->command('shopify:review-sync')
+            ->everyThirtyMinutes()
+            ->sendOutputTo(storage_path('logs/shopifyreviewsync.log'))
+            ->pingBefore(env('SHOPIFY_BASE_URL'))
+            ->withoutOverlapping(15);
+
     }
 
     /**
@@ -35,7 +42,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
