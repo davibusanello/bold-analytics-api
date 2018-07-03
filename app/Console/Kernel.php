@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         /**
-         * Job scheduled to run Shopify Reviews API Integration
+         * Scheduled Job to run Shopify Reviews API Integration
          */
         $schedule->command('shopify:review-sync')
             ->everyThirtyMinutes()
