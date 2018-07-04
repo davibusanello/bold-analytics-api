@@ -19,7 +19,13 @@ use App\Http\Resources\ReviewCollection as ReviewsCollectionResource;
 // Get all reviews
 Route::get('/reviews', function () {
     ReviewsCollectionResource::withoutWrapping();
-    return new ReviewsCollectionResource(Reviews::paginate());
+    $appList = [
+        // 'product-upsell',
+        'product-discount',
+        'store-locator'
+    ];
+    $reviews = Reviews::whereIn('app_name', $appList)->get();
+    return new ReviewsCollectionResource($reviews);
 });
 // Get reviews filtered by app name
 Route::get('/app/{name}/reviews', function ($name) {
